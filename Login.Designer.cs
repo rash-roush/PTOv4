@@ -42,7 +42,7 @@
             // 
             // txt_username
             // 
-            txt_username.Location = new Point(384, 58);
+            txt_username.Location = new Point(384, 51);
             txt_username.Margin = new Padding(2, 2, 2, 2);
             txt_username.Name = "txt_username";
             txt_username.Size = new Size(167, 27);
@@ -50,7 +50,7 @@
             // 
             // txt_password
             // 
-            txt_password.Location = new Point(384, 113);
+            txt_password.Location = new Point(384, 115);
             txt_password.Margin = new Padding(2, 2, 2, 2);
             txt_password.Name = "txt_password";
             txt_password.Size = new Size(167, 27);
@@ -123,7 +123,7 @@
             label3.Name = "label3";
             label3.Size = new Size(50, 20);
             label3.TabIndex = 8;
-            label3.Text = "label3";
+            label3.Text = "Role : ";
             // 
             // DBHandler
             // 

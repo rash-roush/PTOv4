@@ -37,8 +37,8 @@ namespace PTOv4
                     + txt_username + "' AND password = '" + txt_password + "'";
                 SqlDataAdapter sda = new SqlDataAdapter(querry, conn);
 
-                DataTable dtable = new DataTable();
-                sda.Fill(dtable);
+                DataTable dtable = new DataTable(); // how to connect to SQL?? i have 2 DB
+                sda.Fill(dtable); // chatgpt "simple local call mySQL connection"
 
                 if (dtable.Rows.Count > 0)
                 {
