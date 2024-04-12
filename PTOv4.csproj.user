@@ -7,6 +7,15 @@
     <Compile Update="MainPage.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="MenuPageEmployee.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MenuPageHumanResource.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MenuPageManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="PTOPlan2.cs">
       <SubType>Form</SubType>
     </Compile>
