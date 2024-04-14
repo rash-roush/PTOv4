@@ -14,15 +14,15 @@ namespace PTOv4
 {
     public partial class DBHandler : Form
     {
-        private SqlConnection conn;
         public DBHandler()
         {
             InitializeComponent();
-            conn = new SqlConnection(@"Data Source=.;Initial Catalog=PTODB;Integrated Security=True;TrustServerCertificate=True");
-            //SqlConnection conn = new SqlConnection(@"Data Source=.;Initial Catalog=PTODB;Integrated Security=True;TrustServerCertificate=True");
         }
-        
-
+        SqlConnection conn = new SqlConnection(@"Data Source=LUUNA;Initial Catalog=PTOv4;Integrated Security=True;Encrypt=False");
+        //Data Source=LUUNA;Initial Catalog=PTOv4;Integrated Security=True;Encrypt=False;Trust Server Certificate=True
+        //C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\PTOv4.mdf
+        //C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\PTOv4.mdf
+        //Data Source=LUUNA;Initial Catalog=PTOv4;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
 
         private void DBHandler_Load(object sender, EventArgs e)
         {
@@ -31,112 +31,95 @@ namespace PTOv4
 
         private void button_login_Click(object sender, EventArgs e)
         {
-            string EmpID = txt_username.Text;
-            string Password = txt_password.Text;
-            string selectedRole = "";
+            //login/enter button
+            //login/enter button
+            string username = txt_username.Text.Trim(); // Trim to remove any leading or trailing white spaces
+            string user_password = txt_password.Text; // Assuming you will implement hashing later
 
-            // Assuming only one item can be checked and it corresponds to the role
-            foreach (int index in checkedListBox1.CheckedIndices)
+            try
             {
-                selectedRole = checkedListBox1.Items[index].ToString(); // Get the selected role
-                break; // Since only one role should be selected, we break after getting the first checked item
+                // Using parameterized queries to prevent SQL Injection
+                string query = "SELECT * FROM Login_new WHERE username = @username AND password = @password";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@password", user_password); // Ideally, compare hashed passwords
+
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+
+                DataTable dataTable = new DataTable();
+                sda.Fill(dataTable);
+
+                if (dataTable.Rows.Count > 0)
+                {
+                    username = txt_username.Text;
+                    user_password = txt_password.Text;
+
+                    //page that need to load next
+                   /* Menu1 MenuPageEmployee = new Menu1();
+                    MenuPageEmployee.Show();
+                    this.Hide();*/
+                }
+                else
+                {
+                    MessageBox.Show("Username or password not correct.");//improve message here
+                }
+                    txt_username.Clear();
+                    txt_password.Clear();
+
+                    //to focus username
+                    txt_username.Focus();
             }
 
-            using (conn)
+            catch (Exception ex)
             {
-                string query = "SELECT EmpPos FROM Employee WHERE EmpID = @EmpID AND Password = @Password";
-
-                try
-                {
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@EmpID", EmpID);
-                        cmd.Parameters.AddWithValue("@Password", Password);
-
-                        using (SqlDataAdapter sda = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dtable = new DataTable();
-                            sda.Fill(dtable);
-
-                            if (dtable.Rows.Count > 0)
-                            {
-                                string EmpPos = dtable.Rows[0]["EmpPos"].ToString();
-
-                                // Check if the selected role from the CheckedListBox matches the EmpPos from the database
-                                // Assuming that selectedRole and EmpPos have been properly assigned values from the UI and database respectively.
-                                if (checkedListBox1.CheckedIndices.Count == 0)
-                                {
-                                    MessageBox.Show("Please select a role to continue.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return; // Stop the login process as no role is selected
-                                }
-
-                                // Continue with the rest of the login process...
-
-                                if ((selectedRole.Equals("Employee") && EmpPos.Equals("Employee")) ||
-                                    (selectedRole.Equals("Manager") && EmpPos.Equals("Manager")) ||
-                                    (selectedRole.Equals("Human Resources") && EmpPos.Equals("HR"))) // Use "HR" if this is the value in the database
-                                {
-                                    // Open the corresponding form based on the selectedRole
-                                    switch (selectedRole)
-                                    {
-                                        case "Employee":
-                                            MenuPageEmployee menuPageEmployee = new MenuPageEmployee();
-                                            menuPageEmployee.Show();
-                                            this.Hide();
-                                            break;
-                                        case "Manager":
-                                            MenuPageManager menuPageManager = new MenuPageManager();
-                                            menuPageManager.Show();
-                                            this.Hide();
-                                            break;
-                                        case "Human Resources": // Text as shown in the CheckedListBox
-                                            MenuPageHumanResource menuPageHumanResource = new MenuPageHumanResource();
-                                            menuPageHumanResource.Show();
-                                            this.Hide();
-                                            break;
-                                        default:
-                                            MessageBox.Show("Unknown position", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Role selection does not match database records.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-
-                            }
-                            else
-                            {
-                                MessageBox.Show("Invalid login details", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                        }
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("An error occurred accessing the database: " + ex.Message);
-                }
-                finally
-                {
-                    conn.Close(); // Always close the connection
-                }
+                MessageBox.Show("Error..." + ex.Message);
             }
+
+            finally
+            {
+                conn.Close();
+            }
+
         }
 
 
-
-        private void button_clear_Click(object sender, EventArgs e)
-        {
-            txt_username.Clear();
-            txt_password.Clear();
-            txt_username.Focus();
-        }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Handle selected index change if necessary
+            //string EmpPos = dtable.Rows[0]["EmpPos"].ToString();
+           /* switch 
+            {
+                case "Employee":
+                    Menu1 menuPageEmployee = new Menu1();
+                    menuPageEmployee.Show();
+                    this.Hide();
+                    break;
+                case "Manager":
+                    MenuPageManager menuPageManager = new MenuPageManager();
+                    menuPageManager.Show();
+                    this.Hide();
+                    break;
+                case "Human Resource":
+                    MenuPageHumanResource menuPageHumanResource = new MenuPageHumanResource();
+                    menuPageHumanResource.Show();
+                    this.Hide();
+                    break;
+                default:
+                    MessageBox.Show("Unknown position", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+            }*/
+
+        }
+
+        private void txt_username_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txt_password_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

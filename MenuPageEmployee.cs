@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace PTOv4
 {
-    public partial class MenuPageEmployee : Form
+    public partial class Menu1 : Form
     {
-        public MenuPageEmployee()
+        public Menu1()
         {
             InitializeComponent();
+        }
+
+        private void Menu1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

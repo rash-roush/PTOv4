@@ -46,6 +46,7 @@
             txt_username.Name = "txt_username";
             txt_username.Size = new Size(208, 31);
             txt_username.TabIndex = 0;
+            txt_username.TextChanged += txt_username_TextChanged;
             // 
             // txt_password
             // 
@@ -54,6 +55,7 @@
             txt_password.Name = "txt_password";
             txt_password.Size = new Size(208, 31);
             txt_password.TabIndex = 1;
+            txt_password.TextChanged += txt_password_TextChanged;
             // 
             // label1
             // 
@@ -101,7 +103,7 @@
             checkedListBox1.FormattingEnabled = true;
             checkedListBox1.Items.AddRange(new object[] { "Employee", "Manager", "Human Resources" });
             checkedListBox1.Location = new Point(469, 236);
-            checkedListBox1.Margin = new Padding(4, 4, 4, 4);
+            checkedListBox1.Margin = new Padding(4);
             checkedListBox1.Name = "checkedListBox1";
             checkedListBox1.Size = new Size(219, 88);
             checkedListBox1.TabIndex = 7;
@@ -133,7 +135,6 @@
             Margin = new Padding(2);
             Name = "DBHandler";
             Text = "DB Handler";
-            Load += DBHandler_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
